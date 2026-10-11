@@ -34,14 +34,14 @@ namespace my {
     template<std::integral T>
     T compute_uniform_integer(T max_excluded)
     {
-      assert(max > 0);
+      assert(max_excluded > 0);
       return static_cast<T>(compute_raw_integer(max_excluded));
     }
 
     template<std::integral T>
     T compute_uniform_integer(T min_included, T max_excluded)
     {
-      assert(min < max);
+      assert(min_included < max_excluded);
       using U = std::make_unsigned_t<T>;
       const U range = U(max_excluded) - U(min_included);
       return min_included + static_cast<T>(compute_raw_integer(range));
@@ -68,7 +68,7 @@ namespace my {
     template<std::floating_point T>
     T compute_uniform_float(T min_included, T max_excluded)
     {
-      return min_included + compute_uniform_float<T>() * (max_excluded - min_included);
+      return min_included + (compute_uniform_float<T>() * (max_excluded - min_included));
     }
 
 
@@ -82,7 +82,7 @@ namespace my {
     double compute_raw_double();
     float compute_raw_float();
 
-    uint64_t m_state[4];
+    uint64_t m_state[4] = { UINT64_C(0), UINT64_C(0), UINT64_C(0), UINT64_C(0) };
   };
 
 }
